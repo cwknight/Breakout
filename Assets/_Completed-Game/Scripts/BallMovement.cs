@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BallMovement : MonoBehaviour
 {
@@ -13,12 +14,19 @@ public class BallMovement : MonoBehaviour
 
     private Vector3 lastFrameVelocity;
     private Rigidbody rb;
+    private int count;
+
+    public Text countText;
+    public Text winText;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.velocity = initialVelocity;
         lastFrameVelocity = rb.velocity;
+        count = 0;
+        countText.text = "Count: ";
+        winText.text = "";
         //Debug.Log("initial velocity" + rb.velocity.ToString());
     }
 
@@ -31,6 +39,12 @@ public class BallMovement : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         Bounce(collision.contacts[0].normal);
+        if (collision.collider.CompareTag("Brick"))
+        {
+            count += 1;
+
+            SetCountText();
+        }
     }
 
     private void Bounce(Vector3 collisionNormal)
@@ -40,5 +54,19 @@ public class BallMovement : MonoBehaviour
 
         Debug.Log("Out Direction: " + direction);
         rb.velocity = direction * Mathf.Max(speed, minVelocity);
+    }
+
+    // Create a standalone function that can update the 'countText' UI and check if the required amount to win has been achieved
+    void SetCountText()
+    {
+        // Update the text field of our 'countText' variable
+        countText.text = "Count: " + count.ToString();
+
+        // Check if our 'count' is equal to or exceeded 12
+        if (count >= 25)
+        {
+            // Set the text value of our 'winText'
+            winText.text = "You Win!";
+        }
     }
 }
