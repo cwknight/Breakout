@@ -36,6 +36,5 @@ public class BallMiss : MonoBehaviour
             failtext.text = "Fail: " + count.ToString();
         }
     }
-
-    ontrigger
+    
 }
