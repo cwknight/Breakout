@@ -259,3 +259,13 @@ paket-files/
 # Python Tools for Visual Studio (PTVS)
 __pycache__/
 *.pyc
+Temp/__Backupscenes/0.backup
+*.bakert
+Temp/UnityLockfile
+Temp/UnityTempFile-19270fd2cf0af2049a1076c0d9f64e23
+Temp/UnityTempFile-35ba9d4a6d4931d4b92cd8308460e38e
+Temp/UnityTempFile-3fef20724e433cb41a4054b4531f10db
+Temp/UnityTempFile-b381b37b96d2ee6469da0b5275d5e2f3
+Temp/UnityTempFile-c76162bcf6bd9d242b4aeab99b4bfc5e
+Temp/UnityTempFile-ce29ed084416a70448389005641234b0
+Temp/UnityTempFile-effd838a0e896df43ab315ea3c4c9efb
