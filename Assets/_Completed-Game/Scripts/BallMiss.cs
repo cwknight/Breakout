@@ -20,10 +20,7 @@ public class BallMiss : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (count >= 3)
-        {
-            loseText.text = "You lose";
-        }
+        
     }
 
     private void OnTriggerEnter(Collider other)
@@ -34,6 +31,12 @@ public class BallMiss : MonoBehaviour
             
             count += 1;
             failtext.text = "Fail: " + count.ToString();
+
+            if (count >= 3)
+            {
+                loseText.text = "You lose";
+                Destroy(other.gameObject);
+            }
         }
     }
     
