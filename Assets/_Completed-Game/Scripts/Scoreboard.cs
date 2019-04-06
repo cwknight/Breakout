@@ -22,12 +22,15 @@ public class Scoreboard : MonoBehaviour
     public Text messageText;
     public int startingLives;
     public int targetScore;
+    public RawImage titleImage;
     
     // Start is called before the first frame update
     void Start()
     {
         spawner = GetComponent<SpawnBall>();
         LoseGame();
+        titleImage.GetComponent<RawImage>().enabled = true;
+        messageText.enabled = true;
         messageText.text = START_MESSAGE;
     }
 
@@ -59,6 +62,7 @@ public class Scoreboard : MonoBehaviour
         UpdateLivesText();
         UpdateScoreText();
         messageText.text = "";
+        titleImage.GetComponent<RawImage>().enabled = false;
         Time.timeScale = 1.0f;
         currentState = STATE.Running;
         spawner.Spawn();
@@ -66,6 +70,7 @@ public class Scoreboard : MonoBehaviour
 
     public void PauseGame()
     {
+        
         currentState = STATE.Paused;
         messageText.text = PAUSE_MESSAGE;
         Time.timeScale = 0;
