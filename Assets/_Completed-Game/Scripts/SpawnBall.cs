@@ -6,12 +6,13 @@ public class SpawnBall : MonoBehaviour
 {
     public GameObject ballPrefab;
     public Vector3 startPosition;
-    
+    public GameObject Ball;
+
 
     // Start is called before the first frame update
     void Start()
     {
-        Spawn();
+
     }
 
     // Update is called once per frame
@@ -22,8 +23,8 @@ public class SpawnBall : MonoBehaviour
 
     public void Spawn()
     {
-        GameObject ball = Instantiate(ballPrefab);
-        ball.transform.position = startPosition;
+        Ball = Instantiate(ballPrefab);
+        Ball.transform.position = startPosition;
         
     }
 }
