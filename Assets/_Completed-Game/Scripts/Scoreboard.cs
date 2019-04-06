@@ -88,11 +88,13 @@ public class Scoreboard : MonoBehaviour
     public void WinGame()
     {
         Destroy(spawner.Ball);
+        Time.timeScale = 0;
         messageText.text = WIN_MESSAGE + START_MESSAGE;
         currentState = STATE.Over;
     }
     public void LoseGame()
     {
+        Time.timeScale = 0;
         ZeroScore();
         messageText.text = LOSE_MESSAGE + START_MESSAGE;
         currentState = STATE.Over;
