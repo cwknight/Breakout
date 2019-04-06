@@ -68,6 +68,7 @@
     <Compile Include="Assets\_Completed-Game\Scripts\Rotator.cs" />
     <Compile Include="Assets\_Completed-Game\Scripts\SetColor.cs" />
     <Compile Include="Assets\_Completed-Game\Scripts\Slider.cs" />
+    <Compile Include="Assets\_Completed-Game\Scripts\SpawnBall.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>D:/Programming/Unity Games/Breakout Clone/Breakout clone/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
