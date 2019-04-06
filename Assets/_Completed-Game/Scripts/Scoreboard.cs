@@ -96,8 +96,15 @@ public class Scoreboard : MonoBehaviour
     {
         Time.timeScale = 0;
         ZeroScore();
+        ZeroLives();
         messageText.text = LOSE_MESSAGE + START_MESSAGE;
         currentState = STATE.Over;
+    }
+
+    public void ZeroLives()
+    {
+        lives = 0;
+        UpdateLivesText();
     }
 
     public void IncrementLives()
