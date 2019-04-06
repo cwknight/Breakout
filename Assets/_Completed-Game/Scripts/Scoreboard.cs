@@ -15,7 +15,9 @@ public class Scoreboard : MonoBehaviour
     private string SCORE_PREFIX = "Score: ";
     private enum STATE {Running, Over, Paused};
     private STATE currentState;
-    private SpawnBall spawner;
+    private SpawnBall ballSpawner;
+    private SpawnBrick brickSpawner;
+    private int rowPosition;
 
     public Text scoreText;
     public Text livesText;
@@ -23,11 +25,14 @@ public class Scoreboard : MonoBehaviour
     public int startingLives;
     public int targetScore;
     public RawImage titleImage;
+    public int StartingRowPosition;
     
     // Start is called before the first frame update
     void Start()
     {
-        spawner = GetComponent<SpawnBall>();
+        ballSpawner = GetComponent<SpawnBall>();
+        brickSpawner = GetComponent<SpawnBrick>();
+        rowPosition = StartingRowPosition;
         LoseGame();
         titleImage.GetComponent<RawImage>().enabled = true;
         messageText.enabled = true;
@@ -59,13 +64,15 @@ public class Scoreboard : MonoBehaviour
     {
         lives = startingLives;
         score = 0;
+        brickSpawner.DestoryBricks();
         UpdateLivesText();
         UpdateScoreText();
         messageText.text = "";
         titleImage.GetComponent<RawImage>().enabled = false;
         Time.timeScale = 1.0f;
         currentState = STATE.Running;
-        spawner.Spawn();
+        ballSpawner.Spawn();
+        brickSpawner.SpawnBrickRowAt(rowPosition, 5);
     }
 
     public void PauseGame()
@@ -92,7 +99,7 @@ public class Scoreboard : MonoBehaviour
 
     public void WinGame()
     {
-        Destroy(spawner.Ball);
+        Destroy(ballSpawner.Ball);
         Time.timeScale = 0;
         messageText.text = WIN_MESSAGE + START_MESSAGE;
         currentState = STATE.Over;
@@ -102,6 +109,7 @@ public class Scoreboard : MonoBehaviour
         Time.timeScale = 0;
         ZeroScore();
         ZeroLives();
+        brickSpawner.DestoryBricks();
         messageText.text = LOSE_MESSAGE + START_MESSAGE;
         currentState = STATE.Over;
     }
@@ -126,7 +134,7 @@ public class Scoreboard : MonoBehaviour
         CheckVictory();
         if (currentState != STATE.Over)
         {
-            spawner.Spawn();
+            ballSpawner.Spawn();
         }
     }
 
