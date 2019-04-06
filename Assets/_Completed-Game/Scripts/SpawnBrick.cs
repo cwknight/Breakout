@@ -40,7 +40,7 @@ public class SpawnBrick : MonoBehaviour
         }
     }
 
-    public void DestoryBricks()
+    public void DestroyBricks()
     {
         GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Brick");
         foreach (var item in gameObjects)

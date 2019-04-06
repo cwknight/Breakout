@@ -66,7 +66,7 @@ public class Scoreboard : MonoBehaviour
     public void NewGame()
     {
         score = 0;
-        brickSpawner.DestoryBricks();
+        brickSpawner.DestroyBricks();
         UpdateLivesText();
         UpdateScoreText();
         messageText.text = "";
@@ -80,11 +80,15 @@ public class Scoreboard : MonoBehaviour
     public void SpawnLevel(int level)
     {
         UpdateLevelText(level);
-        targetScore = 5 * level;
-        for (int i = 0; i < level; i++)
+        if (level < 7)
         {
-            brickSpawner.SpawnBrickRowAt(i, 5);
+            targetScore = 5 * level;
+            for (int i = 0; i < level; i++)
+            {
+                brickSpawner.SpawnBrickRowAt(i, 5);
+            }
         }
+        
     }
     public void PauseGame()
     {
@@ -122,7 +126,7 @@ public class Scoreboard : MonoBehaviour
         ZeroScore();
         levelCount = StartingLevel;
         lives = startingLives;
-        brickSpawner.DestoryBricks();
+        brickSpawner.DestroyBricks();
         messageText.text = LOSE_MESSAGE + START_MESSAGE;
         currentState = STATE.Over;
     }
