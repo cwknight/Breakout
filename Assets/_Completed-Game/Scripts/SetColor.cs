@@ -24,15 +24,15 @@ public class SetColor : MonoBehaviour
 
         colors[0] = Color.white;
 
-        colors[1] = Color.black;
+        colors[1] = Color.blue;
 
-        colors[2] = Color.red;
+        colors[2] = Color.green;
 
-        colors[3] = Color.green;
+        colors[3] = Color.yellow;
 
-        colors[4] = Color.blue;
+        colors[4] = Color.red;
 
-        colors[5] = Color.magenta;
+        colors[5] = Color.black;
 
         health = (Random.Range(0, 5));
         UpdateColorAndHealth();
