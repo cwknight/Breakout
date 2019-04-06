@@ -4,10 +4,11 @@ using UnityEngine;
 
 public class BreakBrick : MonoBehaviour
 {
+    private Scoreboard scoreboard;
     // Start is called before the first frame update
     void Start()
     {
-        
+        scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
     }
 
     // Update is called once per frame
@@ -19,8 +20,8 @@ public class BreakBrick : MonoBehaviour
     {
         if (collision.collider.gameObject.CompareTag("Ball"))
         {
-
             Destroy(gameObject);
+            scoreboard.IncrementScore();
         }
         
     }

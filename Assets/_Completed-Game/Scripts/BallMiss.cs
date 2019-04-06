@@ -5,38 +5,26 @@ using UnityEngine.UI;
 
 public class BallMiss : MonoBehaviour
 {
-    private int count;
-    public Text failtext;
-    public Text loseText;
+    private Scoreboard scoreboard;
 
     // Start is called before the first frame update
     void Start()
     {
-        count = 0;
-        loseText.text = "";
-        failtext.text = "";
+        scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("Ball"))
         {
-            other.attachedRigidbody.MovePosition(new Vector3(0.0f, 0.4f, 0.0f));
-            
-            count += 1;
-            failtext.text = "Fail: " + count.ToString();
-
-            if (count >= 3)
-            {
-                loseText.text = "You lose";
-                Destroy(other.gameObject);
-            }
+            Destroy(other.gameObject);
+            scoreboard.DecrementLives();
         }
     }
     
