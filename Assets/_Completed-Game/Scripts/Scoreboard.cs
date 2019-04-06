@@ -13,6 +13,7 @@ public class Scoreboard : MonoBehaviour
     private string PAUSE_MESSAGE = "Press Space/A to unpause ";
     private string LIVES_PREFIX = "Lives: ";
     private string SCORE_PREFIX = "Score: ";
+    private string LEVEL_PREFIX = "Level: ";
     private enum STATE {Running, Over, Paused};
     private STATE currentState;
     private SpawnBall ballSpawner;
@@ -24,6 +25,7 @@ public class Scoreboard : MonoBehaviour
     public RawImage titleImage;
     public Text scoreText;
     public Text livesText;
+    public Text levelText;
     public Text messageText;
     public int startingLives;
     public int StartingLevel;
@@ -77,6 +79,7 @@ public class Scoreboard : MonoBehaviour
 
     public void SpawnLevel(int level)
     {
+        UpdateLevelText(level);
         targetScore = 5 * level;
         for (int i = 0; i < level; i++)
         {
@@ -176,6 +179,11 @@ public class Scoreboard : MonoBehaviour
     public void UpdateLivesText()
     {
         livesText.text = LIVES_PREFIX + lives.ToString();
+    }
+
+    public void UpdateLevelText(int level)
+    {
+        levelText.text = LEVEL_PREFIX + level.ToString();
     }
 
     public void CheckVictory()
