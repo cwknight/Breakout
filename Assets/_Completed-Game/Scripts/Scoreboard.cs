@@ -18,21 +18,22 @@ public class Scoreboard : MonoBehaviour
     private SpawnBall ballSpawner;
     private SpawnBrick brickSpawner;
     private int rowPosition;
+    private int levelCount;
+    private int targetScore;
 
+    public RawImage titleImage;
     public Text scoreText;
     public Text livesText;
     public Text messageText;
     public int startingLives;
-    public int targetScore;
-    public RawImage titleImage;
-    public int StartingRowPosition;
+    public int StartingLevel;
     
     // Start is called before the first frame update
     void Start()
     {
         ballSpawner = GetComponent<SpawnBall>();
         brickSpawner = GetComponent<SpawnBrick>();
-        rowPosition = StartingRowPosition;
+        levelCount = StartingLevel;
         LoseGame();
         titleImage.GetComponent<RawImage>().enabled = true;
         messageText.enabled = true;
@@ -62,7 +63,6 @@ public class Scoreboard : MonoBehaviour
 
     public void NewGame()
     {
-        lives = startingLives;
         score = 0;
         brickSpawner.DestoryBricks();
         UpdateLivesText();
@@ -72,9 +72,17 @@ public class Scoreboard : MonoBehaviour
         Time.timeScale = 1.0f;
         currentState = STATE.Running;
         ballSpawner.Spawn();
-        brickSpawner.SpawnBrickRowAt(rowPosition, 5);
+        SpawnLevel(levelCount);
     }
 
+    public void SpawnLevel(int level)
+    {
+        targetScore = 5 * level;
+        for (int i = 0; i < level; i++)
+        {
+            brickSpawner.SpawnBrickRowAt(i, 5);
+        }
+    }
     public void PauseGame()
     {
         
@@ -101,6 +109,7 @@ public class Scoreboard : MonoBehaviour
     {
         Destroy(ballSpawner.Ball);
         Time.timeScale = 0;
+        levelCount++;
         messageText.text = WIN_MESSAGE + START_MESSAGE;
         currentState = STATE.Over;
     }
@@ -108,7 +117,8 @@ public class Scoreboard : MonoBehaviour
     {
         Time.timeScale = 0;
         ZeroScore();
-        ZeroLives();
+        levelCount = StartingLevel;
+        lives = startingLives;
         brickSpawner.DestoryBricks();
         messageText.text = LOSE_MESSAGE + START_MESSAGE;
         currentState = STATE.Over;
