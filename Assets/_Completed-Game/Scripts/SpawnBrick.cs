@@ -29,6 +29,17 @@ public class SpawnBrick : MonoBehaviour
         brickCount += brick.GetComponent<SetColor>().health;
     }
 
+    public void SpawnBrickAt(int height, int width)
+    {
+        height = Mathf.Min(maxHeight, height);
+        height = maxHeight - height;
+        float heightF = 1.5f * height;
+        width = Mathf.Min(maxLength, width);
+        float lengthF = -7.0f + (3.5f * width);
+        Vector3 position = new Vector3(lengthF, 0.5f, heightF);
+        SpawnBrickAt(position);
+    }
+
     public void SpawnBrickRowAt(int height, int length)
     {
         
@@ -63,5 +74,31 @@ public class SpawnBrick : MonoBehaviour
             SpawnBrickRowAt(i, maxLength);
         }
 
+    }
+
+    public void SpawnLevel(int levelSelector)
+    {
+        //brick addressing goes from top to bottom
+        switch (levelSelector)
+        {
+            case 0: //every other row starting at 0
+                SpawnEveryOtherRow(0);
+                break;
+            case 1: //ever other row starting at 1
+                SpawnEveryOtherRow(1);
+                break;
+            case 2:
+                SpawnEveryOtherRow(0);
+                SpawnBrickAt(1, 1);
+                SpawnBrickAt(1, 3);
+                break;
+            case 3:
+                SpawnBrickRowAt(6, 5);
+                SpawnBrickRowAt(2, 5);
+                SpawnBrickAt(0, 2);
+                break;
+            
+
+        }
     }
 }

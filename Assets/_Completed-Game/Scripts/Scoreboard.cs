@@ -94,6 +94,9 @@ public class Scoreboard : MonoBehaviour
         } if (level == 8)
         {
             brickSpawner.SpawnEveryOtherRow(0);
+        } if (level > 8)
+        {
+            brickSpawner.SpawnLevel(level - 9);
         }
         targetScore += brickSpawner.brickCount;
     }
