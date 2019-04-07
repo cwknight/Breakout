@@ -54,4 +54,14 @@ public class SpawnBrick : MonoBehaviour
         }
         brickCount = 0;
     }
+
+    public void SpawnEveryOtherRow(int startingHeight)
+    {
+        startingHeight = maxHeight - Mathf.Min(maxHeight, startingHeight);
+        for (int i = startingHeight;  i >= 0;  i -= 2)
+        {
+            SpawnBrickRowAt(i, maxLength);
+        }
+
+    }
 }

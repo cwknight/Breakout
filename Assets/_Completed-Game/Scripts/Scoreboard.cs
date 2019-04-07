@@ -88,11 +88,14 @@ public class Scoreboard : MonoBehaviour
             {
                  brickSpawner.SpawnBrickRowAt(i, 5);
             }
-            targetScore += brickSpawner.brickCount;
+            
 
 
+        } if (level == 8)
+        {
+            brickSpawner.SpawnEveryOtherRow(0);
         }
-        
+        targetScore += brickSpawner.brickCount;
     }
     public void PauseGame()
     {
