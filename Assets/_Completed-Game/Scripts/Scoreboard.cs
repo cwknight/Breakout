@@ -20,7 +20,7 @@ public class Scoreboard : MonoBehaviour
     private SpawnBrick brickSpawner;
     private int rowPosition;
     private int levelCount;
-    private int targetScore;
+    private int targetScore = 0;
 
     public RawImage titleImage;
     public Text scoreText;
@@ -66,6 +66,7 @@ public class Scoreboard : MonoBehaviour
     public void NewGame()
     {
         score = 0;
+        targetScore = 0;
         brickSpawner.DestroyBricks();
         UpdateLivesText();
         UpdateScoreText();
@@ -82,11 +83,14 @@ public class Scoreboard : MonoBehaviour
         UpdateLevelText(level);
         if (level < 7)
         {
-            targetScore = 5 * level;
+            
             for (int i = 0; i < level; i++)
             {
-                brickSpawner.SpawnBrickRowAt(i, 5);
+                 brickSpawner.SpawnBrickRowAt(i, 5);
             }
+            targetScore += brickSpawner.brickCount;
+
+
         }
         
     }

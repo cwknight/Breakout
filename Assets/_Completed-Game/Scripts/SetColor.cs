@@ -12,10 +12,8 @@ public class SetColor : MonoBehaviour
 
     float transitionTime = 5f; // Amount of time it takes to fade between colors
 
-    void Start()
-
+    private void Awake()
     {
-
         thisRend = GetComponent<Renderer>(); // grab the renderer component on our cube
 
         colors = new Color[6]; // We will randomize through this array
@@ -40,6 +38,12 @@ public class SetColor : MonoBehaviour
         //start our coroutine when the game starts
 
         //StartCoroutine(ColorChange());
+    }
+    void Start()
+
+    {
+
+        
 
     }
 

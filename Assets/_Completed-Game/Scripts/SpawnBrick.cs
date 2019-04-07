@@ -7,11 +7,13 @@ public class SpawnBrick : MonoBehaviour
     public GameObject Brick;
     public int maxLength = 5; //set to the max width of the field in bricks
     public int maxHeight = 6;
+    [SerializeField]
+    public int brickCount = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        brickCount = 0;
     }
 
     // Update is called once per frame
@@ -24,10 +26,12 @@ public class SpawnBrick : MonoBehaviour
     {
         GameObject brick = Instantiate(Brick);
         brick.transform.position = position;
+        brickCount += brick.GetComponent<SetColor>().health;
     }
 
     public void SpawnBrickRowAt(int height, int length)
     {
+        
         height = Mathf.Min(maxHeight, height);
         height = maxHeight - height;
         float heightF = 1.5f * height;
@@ -38,6 +42,7 @@ public class SpawnBrick : MonoBehaviour
             Vector3 startPos = new Vector3(-7.0f + lengthF, 0.5f, heightF);
             SpawnBrickAt(startPos);
         }
+        
     }
 
     public void DestroyBricks()
@@ -47,5 +52,6 @@ public class SpawnBrick : MonoBehaviour
         {
             Destroy(item);
         }
+        brickCount = 0;
     }
 }
