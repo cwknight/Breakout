@@ -22,9 +22,14 @@ public class SpawnBrick : MonoBehaviour
         
     }
 
-    public void ContinuousMode()
+    public void ContinuousModeRandom()
     {
-        InvokeRepeating("MoveAndSpawn", 0, 10.0f);
+        StartCoroutine(MoveAndSpawn());
+    }
+
+    public void ContinuousMode(int health)
+    {
+        StartCoroutine(MoveAndSpawn(health));
     }
 
     public void StopContinuousMode()
@@ -141,10 +146,26 @@ public class SpawnBrick : MonoBehaviour
         }
     }
 
-    public void MoveAndSpawn()
+    IEnumerator MoveAndSpawn(int health)
     {
-        MoveAllBricksDown();
-        SpawnBrickRowAt(0, 5, 1);
+        while (true)
+        {
+            MoveAllBricksDown();
+            SpawnBrickRowAt(0, 5, health);
+            yield return new WaitForSeconds(6.0f);
+        }
+        
+    }
+
+    IEnumerator MoveAndSpawn()
+    {
+        while (true)
+        {
+            MoveAllBricksDown();
+            SpawnBrickRowAt(0, 5);
+            yield return new WaitForSeconds(10.0f);
+        }
+        
     }
 
 
@@ -155,22 +176,48 @@ public class SpawnBrick : MonoBehaviour
         switch (levelSelector)
         {
             case 0: //every other row starting at 0
-                SpawnEveryOtherRow(0);
+                ContinuousModeRandom();
                 break;
             case 1: //ever other row starting at 1
-                SpawnEveryOtherRow(1);
-                break;
-            case 2:
-                SpawnEveryOtherRow(0);
-                SpawnBrickAt(1, 1);
-                SpawnBrickAt(1, 3);
-                break;
-            case 3:
                 SpawnBrickRowAt(6, 5);
                 SpawnBrickRowAt(2, 5);
                 SpawnBrickAt(0, 2);
                 break;
+            case 2:
+                SpawnEveryOtherRow(1);
+                break;
+            case 3:
+                SpawnEveryOtherRow(0);
+                SpawnBrickAt(1, 1);
+                SpawnBrickAt(1, 3);
+                break;
             
+
+        }
+    }
+
+    public void SpawnLevel(int levelSelector, int health)
+    {
+        //brick addressing goes from top to bottom
+        switch (levelSelector)
+        {
+            case 0: //every other row starting at 0
+                ContinuousMode(health);
+                break;
+            case 1: //ever other row starting at 1
+                SpawnBrickRowAt(6, 5, health);
+                SpawnBrickRowAt(2, 5, health);
+                SpawnBrickAt(0, 2, health);
+                break;
+            case 2:
+                SpawnEveryOtherRow(1, health);
+                break;
+            case 3:
+                SpawnEveryOtherRow(0, health);
+                SpawnBrickAt(1, 1, health);
+                SpawnBrickAt(1, 3, health);
+                break;
+
 
         }
     }

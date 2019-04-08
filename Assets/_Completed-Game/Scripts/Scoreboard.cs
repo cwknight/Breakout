@@ -29,6 +29,7 @@ public class Scoreboard : MonoBehaviour
     public Text messageText;
     public int startingLives;
     public int StartingLevel;
+    public int BrickHealth;
     
     // Start is called before the first frame update
     void Start()
@@ -75,35 +76,27 @@ public class Scoreboard : MonoBehaviour
         Time.timeScale = 1.0f;
         currentState = STATE.Running;
         ballSpawner.Spawn();
-        SpawnLevel(levelCount);
+        if (BrickHealth != 0)
+        {
+            SpawnLevel(levelCount, BrickHealth);
+        }
+        else
+        {
+            SpawnLevel(levelCount);
+        }
     }
 
     public void SpawnLevel(int level)
     {
         UpdateLevelText(level);
-        if(level == 0)
-        {
-            brickSpawner.ContinuousMode();
-            targetScore = 9999;
-        }
-        else if (level < 7 && level != 0)
-        {
-            
-            for (int i = 0; i < level; i++)
-            {
-                 brickSpawner.SpawnBrickRowAt(i, 5);
-            }
-            
+        brickSpawner.SpawnLevel(level);
+        
+    }
 
-
-        } if (level == 8)
-        {
-            brickSpawner.SpawnEveryOtherRow(0);
-        } if (level > 8)
-        {
-            brickSpawner.SpawnLevel(level - 9);
-        }
-        targetScore += brickSpawner.brickCount;
+    public void SpawnLevel(int level, int health)
+    {
+        UpdateLevelText(level);
+        brickSpawner.SpawnLevel(level, health);
     }
     public void PauseGame()
     {
@@ -142,6 +135,7 @@ public class Scoreboard : MonoBehaviour
         levelCount = StartingLevel;
         lives = startingLives;
         brickSpawner.DestroyBricks();
+        Destroy(ballSpawner.Ball);
         messageText.text = LOSE_MESSAGE + START_MESSAGE;
         currentState = STATE.Over;
     }
@@ -207,7 +201,7 @@ public class Scoreboard : MonoBehaviour
 
     public void CheckVictory()
     {
-        if (score >= targetScore)
+        if (score >= brickSpawner.brickCount)
         {
             WinGame();
         } else if (lives <= 0)

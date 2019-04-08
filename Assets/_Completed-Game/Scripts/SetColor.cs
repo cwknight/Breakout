@@ -32,7 +32,7 @@ public class SetColor : MonoBehaviour
 
         colors[5] = Color.black;
 
-        health = (Random.Range(1, 5));
+        health = (Random.Range(0, 5));
         UpdateColorAndHealth();
 
         //start our coroutine when the game starts
