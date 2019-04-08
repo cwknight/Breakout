@@ -81,7 +81,12 @@ public class Scoreboard : MonoBehaviour
     public void SpawnLevel(int level)
     {
         UpdateLevelText(level);
-        if (level < 7)
+        if(level == 0)
+        {
+            brickSpawner.ContinuousMode();
+            targetScore = 9999;
+        }
+        else if (level < 7 && level != 0)
         {
             
             for (int i = 0; i < level; i++)
