@@ -45,7 +45,21 @@ public class PlayerController : MonoBehaviour {
             movement = new Vector3(moveHorizontal, 0.0f, 0.0f);
             // Add a physical force to our Player rigidbody using our 'movement' Vector3 above, 
             // multiplying it by 'speed' - our public player speed that appears in the inspector
-            rb.AddForce(movement * speed, ForceMode.Impulse);
+            if (rb.transform.position.x < 8.1f && rb.transform.position.x > -8.1f)
+            {
+                rb.AddForce(movement * speed, ForceMode.Impulse);
+            } else
+            {
+                if (rb.transform.position.x > 8.1f)
+                {
+                    rb.position = new Vector3(8.0f, .5f, -8.0f);
+                } if (rb.transform.position.x < -8.1f)
+                {
+                    rb.position = new Vector3(-8.0f, .5f, -8.0f);
+                }
+                
+            }
+                
         }
 		
 

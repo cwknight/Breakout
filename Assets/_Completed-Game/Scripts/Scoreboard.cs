@@ -13,21 +13,30 @@ public class Scoreboard : MonoBehaviour
     private string PAUSE_MESSAGE = "Press Space/A to unpause ";
     private string LIVES_PREFIX = "Lives: ";
     private string SCORE_PREFIX = "Score: ";
+    private string LEVEL_PREFIX = "Level: ";
     private enum STATE {Running, Over, Paused};
     private STATE currentState;
-    private SpawnBall spawner;
+    private SpawnBall ballSpawner;
+    private SpawnBrick brickSpawner;
+    private int rowPosition;
+    private int levelCount;
+    private int targetScore = 0;
 
+    public RawImage titleImage;
     public Text scoreText;
     public Text livesText;
+    public Text levelText;
     public Text messageText;
     public int startingLives;
-    public int targetScore;
-    public RawImage titleImage;
+    public int StartingLevel;
+    public int BrickHealth;
     
     // Start is called before the first frame update
     void Start()
     {
-        spawner = GetComponent<SpawnBall>();
+        ballSpawner = GetComponent<SpawnBall>();
+        brickSpawner = GetComponent<SpawnBrick>();
+        levelCount = StartingLevel;
         LoseGame();
         titleImage.GetComponent<RawImage>().enabled = true;
         messageText.enabled = true;
@@ -57,17 +66,38 @@ public class Scoreboard : MonoBehaviour
 
     public void NewGame()
     {
-        lives = startingLives;
         score = 0;
+        targetScore = 0;
+        brickSpawner.DestroyBricks();
         UpdateLivesText();
         UpdateScoreText();
         messageText.text = "";
         titleImage.GetComponent<RawImage>().enabled = false;
         Time.timeScale = 1.0f;
         currentState = STATE.Running;
-        spawner.Spawn();
+        ballSpawner.Spawn();
+        if (BrickHealth != 0)
+        {
+            SpawnLevel(levelCount, BrickHealth);
+        }
+        else
+        {
+            SpawnLevel(levelCount);
+        }
     }
 
+    public void SpawnLevel(int level)
+    {
+        UpdateLevelText(level);
+        brickSpawner.SpawnLevel(level);
+        
+    }
+
+    public void SpawnLevel(int level, int health)
+    {
+        UpdateLevelText(level);
+        brickSpawner.SpawnLevel(level, health);
+    }
     public void PauseGame()
     {
         
@@ -92,8 +122,9 @@ public class Scoreboard : MonoBehaviour
 
     public void WinGame()
     {
-        Destroy(spawner.Ball);
+        Destroy(ballSpawner.Ball);
         Time.timeScale = 0;
+        levelCount++;
         messageText.text = WIN_MESSAGE + START_MESSAGE;
         currentState = STATE.Over;
     }
@@ -101,7 +132,10 @@ public class Scoreboard : MonoBehaviour
     {
         Time.timeScale = 0;
         ZeroScore();
-        ZeroLives();
+        levelCount = StartingLevel;
+        lives = startingLives;
+        brickSpawner.DestroyBricks();
+        Destroy(ballSpawner.Ball);
         messageText.text = LOSE_MESSAGE + START_MESSAGE;
         currentState = STATE.Over;
     }
@@ -126,7 +160,7 @@ public class Scoreboard : MonoBehaviour
         CheckVictory();
         if (currentState != STATE.Over)
         {
-            spawner.Spawn();
+            ballSpawner.Spawn();
         }
     }
 
@@ -160,9 +194,14 @@ public class Scoreboard : MonoBehaviour
         livesText.text = LIVES_PREFIX + lives.ToString();
     }
 
+    public void UpdateLevelText(int level)
+    {
+        levelText.text = LEVEL_PREFIX + level.ToString();
+    }
+
     public void CheckVictory()
     {
-        if (score >= targetScore)
+        if (score >= brickSpawner.brickCount)
         {
             WinGame();
         } else if (lives <= 0)

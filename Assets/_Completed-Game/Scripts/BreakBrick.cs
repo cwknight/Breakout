@@ -5,10 +5,17 @@ using UnityEngine;
 public class BreakBrick : MonoBehaviour
 {
     private Scoreboard scoreboard;
+    private int health;
+    SetColor setcolor;
     // Start is called before the first frame update
     void Start()
     {
+        setcolor = gameObject.GetComponentInParent<SetColor>();
         scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
+        health = setcolor.health;
+        
+
+
     }
 
     // Update is called once per frame
@@ -20,7 +27,8 @@ public class BreakBrick : MonoBehaviour
     {
         if (collision.collider.gameObject.CompareTag("Ball"))
         {
-            Destroy(gameObject);
+            setcolor.health--;
+            setcolor.UpdateColorAndHealth();
             scoreboard.IncrementScore();
         }
         

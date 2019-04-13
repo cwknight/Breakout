@@ -14,7 +14,7 @@ public class BallMovement : MonoBehaviour
 
     private Vector3 lastFrameVelocity;
     private Rigidbody rb;
-    
+
 
     void Start()
     {
@@ -22,12 +22,14 @@ public class BallMovement : MonoBehaviour
         rb.velocity = initialVelocity;
         lastFrameVelocity = rb.velocity;
         
+
         //Debug.Log("initial velocity" + rb.velocity.ToString());
     }
 
     private void Update()
     {
         lastFrameVelocity = rb.velocity;
+
         //Debug.Log("current velocity" + rb.velocity.ToString());
     }
 
@@ -41,6 +43,20 @@ public class BallMovement : MonoBehaviour
         var speed = lastFrameVelocity.magnitude;
         var direction = Vector3.Reflect(lastFrameVelocity.normalized, collisionNormal);
         rb.velocity = direction * Mathf.Max(speed, minVelocity);
+        //StartCoroutine(minSpeed());
     }
 
+    IEnumerator minSpeed()
+    {
+        
+        while (rb.velocity.magnitude < minVelocity)
+        {
+            
+            rb.velocity = rb.velocity * minVelocity;
+            
+            yield return new WaitWhile(()=>rb.velocity.magnitude > minVelocity);
+        }
+    }
+
+    
 }

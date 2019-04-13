@@ -4,17 +4,16 @@ using UnityEngine;
 
 public class SetColor : MonoBehaviour
 {
+    public int health;
 
     Color[] colors;
 
-    Renderer thisRend; //Renderer of our Cube
+    public Renderer thisRend; //Renderer of our Cube
 
     float transitionTime = 5f; // Amount of time it takes to fade between colors
 
-    void Start()
-
+    private void Awake()
     {
-
         thisRend = GetComponent<Renderer>(); // grab the renderer component on our cube
 
         colors = new Color[6]; // We will randomize through this array
@@ -23,19 +22,28 @@ public class SetColor : MonoBehaviour
 
         colors[0] = Color.white;
 
-        colors[1] = Color.black;
+        colors[1] = Color.blue;
 
-        colors[2] = Color.red;
+        colors[2] = Color.green;
 
-        colors[3] = Color.green;
+        colors[3] = Color.yellow;
 
-        colors[4] = Color.blue;
+        colors[4] = Color.red;
 
-        colors[5] = Color.magenta;
+        colors[5] = Color.black;
+
+        health = (Random.Range(0, 5));
+        UpdateColorAndHealth();
 
         //start our coroutine when the game starts
 
-        StartCoroutine(ColorChange());
+        //StartCoroutine(ColorChange());
+    }
+    void Start()
+
+    {
+
+        
 
     }
 
@@ -43,6 +51,20 @@ public class SetColor : MonoBehaviour
 
     {
 
+    }
+
+    public void UpdateColorAndHealth()
+    {
+        if(health > 0)
+        {
+            Color newColor = colors[health];
+            thisRend.material.SetColor("_Color", newColor);
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+        
     }
 
     IEnumerator ColorChange()
