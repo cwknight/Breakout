@@ -14,7 +14,7 @@ public class Scoreboard : MonoBehaviour
     private string LIVES_PREFIX = "Lives: ";
     private string SCORE_PREFIX = "Score: ";
     private string LEVEL_PREFIX = "Level: ";
-    private enum STATE {Running, Over, Paused};
+    private enum STATE { Running, Over, Paused };
     private STATE currentState;
     private SpawnBall ballSpawner;
     private SpawnBrick brickSpawner;
@@ -30,7 +30,7 @@ public class Scoreboard : MonoBehaviour
     public int startingLives;
     public int StartingLevel;
     public int BrickHealth;
-    
+
     // Start is called before the first frame update
     void Start()
     {
@@ -46,18 +46,15 @@ public class Scoreboard : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        switch (currentState)
-        {
+        switch (currentState) {
             case STATE.Running:
-                if (Input.GetButtonUp("Cancel"))
-                {
+                if (Input.GetButtonUp("Cancel")) {
                     PauseGame();
                 }
                 break;
             case STATE.Paused:
             case STATE.Over:
-                if (Input.GetButtonUp("Submit"))
-                {
+                if (Input.GetButtonUp("Submit")) {
                     UnPauseGame();
                 }
                 break;
@@ -76,12 +73,9 @@ public class Scoreboard : MonoBehaviour
         Time.timeScale = 1.0f;
         currentState = STATE.Running;
         ballSpawner.Spawn();
-        if (BrickHealth != 0)
-        {
+        if (BrickHealth != 0) {
             SpawnLevel(levelCount, BrickHealth);
-        }
-        else
-        {
+        } else {
             SpawnLevel(levelCount);
         }
     }
@@ -90,7 +84,7 @@ public class Scoreboard : MonoBehaviour
     {
         UpdateLevelText(level);
         brickSpawner.SpawnLevel(level);
-        
+
     }
 
     public void SpawnLevel(int level, int health)
@@ -100,7 +94,7 @@ public class Scoreboard : MonoBehaviour
     }
     public void PauseGame()
     {
-        
+
         currentState = STATE.Paused;
         messageText.text = PAUSE_MESSAGE;
         Time.timeScale = 0;
@@ -108,12 +102,9 @@ public class Scoreboard : MonoBehaviour
 
     public void UnPauseGame()
     {
-        if (currentState == STATE.Over)
-        {
+        if (currentState == STATE.Over) {
             NewGame();
-        }
-        else
-        {
+        } else {
             currentState = STATE.Running;
             messageText.text = "";
             Time.timeScale = 1.0f;
@@ -158,8 +149,7 @@ public class Scoreboard : MonoBehaviour
         lives -= 1;
         UpdateLivesText();
         CheckVictory();
-        if (currentState != STATE.Over)
-        {
+        if (currentState != STATE.Over) {
             ballSpawner.Spawn();
         }
     }
@@ -201,11 +191,9 @@ public class Scoreboard : MonoBehaviour
 
     public void CheckVictory()
     {
-        if (score >= brickSpawner.brickCount)
-        {
+        if (score >= brickSpawner.brickCount) {
             WinGame();
-        } else if (lives <= 0)
-        {
+        } else if (lives <= 0) {
             LoseGame();
         }
     }

@@ -18,13 +18,13 @@ public class SpawnBall : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void Spawn()
     {
         Ball = Instantiate(ballPrefab);
         Ball.transform.position = startPosition;
-        
+
     }
 }

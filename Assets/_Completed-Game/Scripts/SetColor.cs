@@ -43,7 +43,7 @@ public class SetColor : MonoBehaviour
 
     {
 
-        
+
 
     }
 
@@ -55,16 +55,13 @@ public class SetColor : MonoBehaviour
 
     public void UpdateColorAndHealth()
     {
-        if(health > 0)
-        {
+        if (health > 0) {
             Color newColor = colors[health];
             thisRend.material.SetColor("_Color", newColor);
-        }
-        else
-        {
+        } else {
             Destroy(gameObject);
         }
-        
+
     }
 
     IEnumerator ColorChange()
@@ -73,9 +70,7 @@ public class SetColor : MonoBehaviour
 
         //Infinite loop will ensure our coroutine runs all game
 
-        while (true)
-
-        {
+        while (true) {
 
             Color newColor = colors[(Random.Range(0, 5))]; // Assign newColor to a random color from our array
 
@@ -89,9 +84,7 @@ public class SetColor : MonoBehaviour
 
              */
 
-            while (transitionRate < 1)
-
-            {
+            while (transitionRate < 1) {
 
                 //this next line is how we change our material color property. We Lerp between the current color and newColor
 

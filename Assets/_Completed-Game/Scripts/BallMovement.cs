@@ -14,27 +14,51 @@ public class BallMovement : MonoBehaviour
 
     private Vector3 lastFrameVelocity;
     private Rigidbody rb;
-
-
+    private enum STATE { Stuck, Unstuck };
+    private STATE currentState;
+    private GameObject Paddle;
+    
     void Start()
     {
+        Paddle = GameObject.FindWithTag("Player");
         rb = GetComponent<Rigidbody>();
-        rb.velocity = initialVelocity;
-        lastFrameVelocity = rb.velocity;
-        
-
+        StickToPaddle();
         //Debug.Log("initial velocity" + rb.velocity.ToString());
+    }
+
+    private void StickToPaddle()
+    {
+        currentState = STATE.Stuck;
+        rb.transform.position = Paddle.transform.position + new Vector3(0, 0, 1.0f);
+        HingeJoint hj;
+        hj = gameObject.AddComponent<HingeJoint>();
+        hj.connectedBody = Paddle.GetComponent<Rigidbody>();
+    }
+
+    private void UnstickFromPaddle()
+    {
+        currentState = STATE.Unstuck;
+        Destroy(gameObject.GetComponent<HingeJoint>());
+        rb.velocity += initialVelocity;
+
     }
 
     private void Update()
     {
         lastFrameVelocity = rb.velocity;
-
+        if (currentState == STATE.Stuck) {
+            if (Input.GetButtonUp("Submit")) {
+                UnstickFromPaddle();
+            }
+        }
         //Debug.Log("current velocity" + rb.velocity.ToString());
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (currentState == STATE.Stuck) {
+            return;
+        }
         Bounce(collision.contacts[0].normal);
     }
 
@@ -48,15 +72,14 @@ public class BallMovement : MonoBehaviour
 
     IEnumerator minSpeed()
     {
-        
-        while (rb.velocity.magnitude < minVelocity)
-        {
-            
+
+        while (rb.velocity.magnitude < minVelocity) {
+
             rb.velocity = rb.velocity * minVelocity;
-            
-            yield return new WaitWhile(()=>rb.velocity.magnitude > minVelocity);
+
+            yield return new WaitWhile(() => rb.velocity.magnitude > minVelocity);
         }
     }
 
-    
+
 }

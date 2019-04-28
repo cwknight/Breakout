@@ -13,7 +13,7 @@ public class Slider : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        int startingPosition = (int)(transform.position[0] + transform.position[1] + transform.position[2]);
+        int startingPosition = (int) (transform.position[0] + transform.position[1] + transform.position[2]);
         Random.InitState(startingPosition);
         speed = Random.Range(lowerSpeedBound, upperSpeedBound);
         randomVector = new Vector3(Random.Range(-1.0f, 1.0f), 0, Random.Range(-1.0f, 1.0f));
@@ -33,11 +33,10 @@ public class Slider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Wall"))
-        {
+        if (other.gameObject.CompareTag("Wall")) {
             randomVector *= -1;
         }
 
-        
+
     }
 }

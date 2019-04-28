@@ -13,7 +13,7 @@ public class BreakBrick : MonoBehaviour
         setcolor = gameObject.GetComponentInParent<SetColor>();
         scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
         health = setcolor.health;
-        
+
 
 
     }
@@ -21,17 +21,16 @@ public class BreakBrick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.gameObject.CompareTag("Ball"))
-        {
+        if (collision.collider.gameObject.CompareTag("Ball")) {
             setcolor.health--;
             setcolor.UpdateColorAndHealth();
             scoreboard.IncrementScore();
         }
-        
+
     }
-    
+
 }
