@@ -19,7 +19,7 @@ public class SpawnBrick : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void ContinuousModeRandom()
@@ -76,18 +76,17 @@ public class SpawnBrick : MonoBehaviour
 
     public void SpawnBrickRowAt(int height, int length)
     {
-        
+
         height = Mathf.Min(maxHeight, height);
         height = maxHeight - height;
         float heightF = 1.5f * height;
         length = Mathf.Min(maxLength, length);
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             float lengthF = 3.5f * i;
             Vector3 startPos = new Vector3(-7.0f + lengthF, 0.5f, heightF);
             SpawnBrickAt(startPos);
         }
-        
+
     }
 
     public void SpawnBrickRowAt(int height, int length, int health)
@@ -97,8 +96,7 @@ public class SpawnBrick : MonoBehaviour
         height = maxHeight - height;
         float heightF = 1.5f * height;
         length = Mathf.Min(maxLength, length);
-        for (int i = 0; i < length; i++)
-        {
+        for (int i = 0; i < length; i++) {
             float lengthF = 3.5f * i;
             Vector3 startPos = new Vector3(-7.0f + lengthF, 0.5f, heightF);
             SpawnBrickAt(startPos, health);
@@ -110,8 +108,7 @@ public class SpawnBrick : MonoBehaviour
     {
         StopAllCoroutines();
         GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Brick");
-        foreach (var item in gameObjects)
-        {
+        foreach (var item in gameObjects) {
             Destroy(item);
         }
         brickCount = 0;
@@ -120,8 +117,7 @@ public class SpawnBrick : MonoBehaviour
     public void SpawnEveryOtherRow(int startingHeight)
     {
         startingHeight = maxHeight - Mathf.Min(maxHeight, startingHeight);
-        for (int i = startingHeight;  i >= 0;  i -= 2)
-        {
+        for (int i = startingHeight; i >= 0; i -= 2) {
             SpawnBrickRowAt(i, maxLength);
         }
 
@@ -130,8 +126,7 @@ public class SpawnBrick : MonoBehaviour
     public void SpawnEveryOtherRow(int startingHeight, int health)
     {
         startingHeight = maxHeight - Mathf.Min(maxHeight, startingHeight);
-        for (int i = startingHeight; i >= 0; i -= 2)
-        {
+        for (int i = startingHeight; i >= 0; i -= 2) {
             SpawnBrickRowAt(i, maxLength, health);
         }
 
@@ -140,32 +135,29 @@ public class SpawnBrick : MonoBehaviour
     public void MoveAllBricksDown()
     {
         GameObject[] bricks = GameObject.FindGameObjectsWithTag("Brick");
-        foreach (var brick in bricks)
-        {
+        foreach (var brick in bricks) {
             brick.transform.Translate(0, 0, -1.5f);
         }
     }
 
     IEnumerator MoveAndSpawn(int health)
     {
-        while (true)
-        {
+        while (true) {
             MoveAllBricksDown();
             SpawnBrickRowAt(0, 5, health);
             yield return new WaitForSeconds(6.0f);
         }
-        
+
     }
 
     IEnumerator MoveAndSpawn()
     {
-        while (true)
-        {
+        while (true) {
             MoveAllBricksDown();
             SpawnBrickRowAt(0, 5);
             yield return new WaitForSeconds(10.0f);
         }
-        
+
     }
 
 
@@ -173,8 +165,7 @@ public class SpawnBrick : MonoBehaviour
     public void SpawnLevel(int levelSelector)
     {
         //brick addressing goes from top to bottom
-        switch (levelSelector)
-        {
+        switch (levelSelector) {
             case 0: //every other row starting at 0
                 ContinuousModeRandom();
                 break;
@@ -191,7 +182,7 @@ public class SpawnBrick : MonoBehaviour
                 SpawnBrickAt(1, 1);
                 SpawnBrickAt(1, 3);
                 break;
-            
+
 
         }
     }
@@ -199,8 +190,7 @@ public class SpawnBrick : MonoBehaviour
     public void SpawnLevel(int levelSelector, int health)
     {
         //brick addressing goes from top to bottom
-        switch (levelSelector)
-        {
+        switch (levelSelector) {
             case 0: //every other row starting at 0
                 ContinuousMode(health);
                 break;

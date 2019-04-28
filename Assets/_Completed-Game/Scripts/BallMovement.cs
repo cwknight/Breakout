@@ -14,7 +14,7 @@ public class BallMovement : MonoBehaviour
 
     private Vector3 lastFrameVelocity;
     private Rigidbody rb;
-    private enum STATE {Stuck, Unstuck};
+    private enum STATE { Stuck, Unstuck };
     private STATE currentState;
 
     public GameObject Paddle;
@@ -32,7 +32,7 @@ public class BallMovement : MonoBehaviour
 
     private void StickToPaddle()
     {
-        currentState = STATE.Stuck;        
+        currentState = STATE.Stuck;
         rb.transform.position = Paddle.transform.position + new Vector3(0, 0, 1.0f);
     }
 
@@ -46,22 +46,20 @@ public class BallMovement : MonoBehaviour
     private void Update()
     {
         lastFrameVelocity = rb.velocity;
-        if(currentState == STATE.Stuck)
-        {
+        if (currentState == STATE.Stuck) {
             rb.position = Paddle.transform.position + new Vector3(0, 0, 1.0f);
-            if (Input.GetButtonUp("Submit"))
-            {
+            if (Input.GetButtonUp("Submit")) {
                 UnstickFromPaddle();
             }
         }
-        
+
 
         //Debug.Log("current velocity" + rb.velocity.ToString());
     }
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(currentState == STATE.Stuck){
+        if (currentState == STATE.Stuck) {
             return;
         }
         Bounce(collision.contacts[0].normal);
@@ -77,15 +75,14 @@ public class BallMovement : MonoBehaviour
 
     IEnumerator minSpeed()
     {
-        
-        while (rb.velocity.magnitude < minVelocity)
-        {
-            
+
+        while (rb.velocity.magnitude < minVelocity) {
+
             rb.velocity = rb.velocity * minVelocity;
-            
-            yield return new WaitWhile(()=>rb.velocity.magnitude > minVelocity);
+
+            yield return new WaitWhile(() => rb.velocity.magnitude > minVelocity);
         }
     }
 
-    
+
 }

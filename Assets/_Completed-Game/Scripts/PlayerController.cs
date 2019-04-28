@@ -5,10 +5,11 @@ using UnityEngine.UI;
 
 using System.Collections;
 
-public class PlayerController : MonoBehaviour {
-	
-	// Create public variables for player speed, and for the Text UI game objects
-	public float speed;
+public class PlayerController : MonoBehaviour
+{
+
+    // Create public variables for player speed, and for the Text UI game objects
+    public float speed;
     [SerializeField]
     private float moveHorizontal;
 
@@ -16,60 +17,54 @@ public class PlayerController : MonoBehaviour {
     // Create private references to the rigidbody component on the player, and the count of pick up objects picked up so far
     private Rigidbody rb;
 
-	// At the start of the game..
-	void Start ()
-	{
+    // At the start of the game..
+    void Start()
+    {
         // Assign the Rigidbody component to our private rb variable
         rb = GetComponent<Rigidbody>();
 
 
-	}
+    }
 
-	// Each physics step..
-	void FixedUpdate ()
-	{
+    // Each physics step..
+    void FixedUpdate()
+    {
         // Set some local float variables equal to the value of our Horizontal and Vertical Inputs
-        moveHorizontal = Input.GetAxis ("Horizontal");
+        moveHorizontal = Input.GetAxis("Horizontal");
         //float moveVertical = Input.GetAxis ("Vertical");
         Vector3 movement;
 
-        if (moveHorizontal == 0.0f)
-        {
+        if (moveHorizontal == 0.0f) {
             movement = new Vector3(-rb.velocity.x, 0.0f, 0.0f);
             rb.AddForce(movement * speed, ForceMode.Impulse);
-            
-        }
-        else
-        {
+
+        } else {
             // Create a Vector3 variable, and assign X and Z to feature our horizontal and vertical float variables above
             movement = new Vector3(moveHorizontal, 0.0f, 0.0f);
             // Add a physical force to our Player rigidbody using our 'movement' Vector3 above, 
             // multiplying it by 'speed' - our public player speed that appears in the inspector
-            if (rb.transform.position.x < 8.1f && rb.transform.position.x > -8.1f)
-            {
+            if (rb.transform.position.x < 8.1f && rb.transform.position.x > -8.1f) {
                 rb.AddForce(movement * speed, ForceMode.Impulse);
-            } else
-            {
-                if (rb.transform.position.x > 8.1f)
-                {
+            } else {
+                if (rb.transform.position.x > 8.1f) {
                     rb.position = new Vector3(8.0f, .5f, -8.0f);
-                } if (rb.transform.position.x < -8.1f)
-                {
+                }
+                if (rb.transform.position.x < -8.1f) {
                     rb.position = new Vector3(-8.0f, .5f, -8.0f);
                 }
-                
+
             }
-                
+
         }
-		
-
-        
-
-	
-
-	}
 
 
 
-	
+
+
+
+    }
+
+
+
+
 }
