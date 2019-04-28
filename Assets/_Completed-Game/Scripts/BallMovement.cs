@@ -16,12 +16,8 @@ public class BallMovement : MonoBehaviour
     private Rigidbody rb;
     private enum STATE { Stuck, Unstuck };
     private STATE currentState;
-
-    public GameObject Paddle;
-
-
-
-
+    private GameObject Paddle;
+    
     void Start()
     {
         Paddle = GameObject.FindWithTag("Player");
@@ -37,19 +33,12 @@ public class BallMovement : MonoBehaviour
         HingeJoint hj;
         hj = gameObject.AddComponent<HingeJoint>();
         hj.connectedBody = Paddle.GetComponent<Rigidbody>();
-        
-        
-       
-
-        
     }
 
     private void UnstickFromPaddle()
     {
         currentState = STATE.Unstuck;
-
         Destroy(gameObject.GetComponent<HingeJoint>());
-
         rb.velocity += initialVelocity;
 
     }
@@ -62,8 +51,6 @@ public class BallMovement : MonoBehaviour
                 UnstickFromPaddle();
             }
         }
-
-
         //Debug.Log("current velocity" + rb.velocity.ToString());
     }
 
