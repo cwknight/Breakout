@@ -14,27 +14,51 @@ public class BallMovement : MonoBehaviour
 
     private Vector3 lastFrameVelocity;
     private Rigidbody rb;
+    private enum STATE {Stuck, Unstuck};
+    private STATE currentState;
+
+    public GameObject Paddle;
+
+
 
 
     void Start()
     {
+        Paddle = GameObject.FindWithTag("Player");
         rb = GetComponent<Rigidbody>();
-        rb.velocity = initialVelocity;
-        lastFrameVelocity = rb.velocity;
-        
-
+        StickToPaddle();
         //Debug.Log("initial velocity" + rb.velocity.ToString());
+    }
+
+    private void StickToPaddle()
+    {
+        currentState = STATE.Stuck;        
+        rb.transform.position = Paddle.transform.position + new Vector3(0, 0, 1.0f);
+    }
+
+    private void UnstickFromPaddle()
+    {
+        currentState = STATE.Unstuck;
+        rb.velocity += initialVelocity;
+
     }
 
     private void Update()
     {
         lastFrameVelocity = rb.velocity;
+        if(currentState == STATE.Stuck)
+        {
+            rb.position = Paddle.transform.position + new Vector3(0, 0, 1.0f);
+        }
 
         //Debug.Log("current velocity" + rb.velocity.ToString());
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if(currentState == STATE.Stuck){
+            return;
+        }
         Bounce(collision.contacts[0].normal);
     }
 
