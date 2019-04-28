@@ -34,11 +34,22 @@ public class BallMovement : MonoBehaviour
     {
         currentState = STATE.Stuck;
         rb.transform.position = Paddle.transform.position + new Vector3(0, 0, 1.0f);
+        HingeJoint hj;
+        hj = gameObject.AddComponent<HingeJoint>();
+        hj.connectedBody = Paddle.GetComponent<Rigidbody>();
+        
+        
+       
+
+        
     }
 
     private void UnstickFromPaddle()
     {
         currentState = STATE.Unstuck;
+
+        Destroy(gameObject.GetComponent<HingeJoint>());
+
         rb.velocity += initialVelocity;
 
     }
@@ -47,7 +58,6 @@ public class BallMovement : MonoBehaviour
     {
         lastFrameVelocity = rb.velocity;
         if (currentState == STATE.Stuck) {
-            rb.position = Paddle.transform.position + new Vector3(0, 0, 1.0f);
             if (Input.GetButtonUp("Submit")) {
                 UnstickFromPaddle();
             }
