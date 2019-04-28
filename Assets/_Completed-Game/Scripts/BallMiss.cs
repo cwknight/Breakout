@@ -24,8 +24,8 @@ public class BallMiss : MonoBehaviour
         if (other.CompareTag("Ball"))
         {
             Destroy(other.gameObject);
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            player.transform.position= new Vector3(0, 0.5f, -8.0f);
+            //GameObject player = GameObject.FindGameObjectWithTag("Player");
+            //player.transform.position= new Vector3(0, 0.5f, -8.0f);
             scoreboard.DecrementLives();
         }
         if (other.CompareTag("Brick"))

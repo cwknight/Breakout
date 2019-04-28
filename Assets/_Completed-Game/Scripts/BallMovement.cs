@@ -49,7 +49,12 @@ public class BallMovement : MonoBehaviour
         if(currentState == STATE.Stuck)
         {
             rb.position = Paddle.transform.position + new Vector3(0, 0, 1.0f);
+            if (Input.GetButtonUp("Submit"))
+            {
+                UnstickFromPaddle();
+            }
         }
+        
 
         //Debug.Log("current velocity" + rb.velocity.ToString());
     }
