@@ -2,9 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
 
 public class Scoreboard : MonoBehaviour
 {
+    public enum Difficulties
+    {
+        Easy = 1,
+        Medium = 3,
+        Hard = 6,
+        Random = 0
+    }
+
     private int score;
     private int lives;
     private string WIN_MESSAGE = "You Win!! ";
@@ -68,7 +77,7 @@ public class Scoreboard : MonoBehaviour
         brickSpawner.DestroyBricks();
         UpdateLivesText();
         UpdateScoreText();
-        messageText.text = "";
+        messageText.enabled = false;
         titleImage.GetComponent<RawImage>().enabled = false;
         Time.timeScale = 1.0f;
         currentState = STATE.Running;
@@ -78,6 +87,26 @@ public class Scoreboard : MonoBehaviour
         } else {
             SpawnLevel(levelCount);
         }
+    }
+
+    public void SetDifficulty(string difficulty)
+    {
+        Difficulties difficultyEnum = (Difficulties) Enum.Parse(typeof(Difficulties), difficulty);
+        BrickHealth = (int) difficultyEnum;
+    }
+
+    public void ToggleContinuous()
+    {
+        if (StartingLevel == 0) {
+            StartingLevel = 1;
+        } else {
+            StartingLevel = 0;
+        }
+    }
+
+    public void SetStartingHealth(int startingHealth)
+    {
+        startingLives = startingHealth;
     }
 
     public void SpawnLevel(int level)
@@ -97,6 +126,7 @@ public class Scoreboard : MonoBehaviour
 
         currentState = STATE.Paused;
         messageText.text = PAUSE_MESSAGE;
+        messageText.enabled = true;
         Time.timeScale = 0;
     }
 
@@ -106,7 +136,7 @@ public class Scoreboard : MonoBehaviour
             NewGame();
         } else {
             currentState = STATE.Running;
-            messageText.text = "";
+            messageText.enabled = false;
             Time.timeScale = 1.0f;
         }
     }
@@ -117,6 +147,7 @@ public class Scoreboard : MonoBehaviour
         Time.timeScale = 0;
         levelCount++;
         messageText.text = WIN_MESSAGE + START_MESSAGE;
+        messageText.enabled = true;
         currentState = STATE.Over;
     }
     public void LoseGame()
@@ -128,6 +159,7 @@ public class Scoreboard : MonoBehaviour
         brickSpawner.DestroyBricks();
         Destroy(ballSpawner.Ball);
         messageText.text = LOSE_MESSAGE + START_MESSAGE;
+        messageText.enabled = true;
         currentState = STATE.Over;
     }
 
