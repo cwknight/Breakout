@@ -10,7 +10,7 @@ public class Scoreboard : MonoBehaviour
     {
         Easy = 1,
         Medium = 3,
-        Hard = 6,
+        Hard = 5,
         Random = 0
     }
 
@@ -23,7 +23,7 @@ public class Scoreboard : MonoBehaviour
     private string LIVES_PREFIX = "Lives: ";
     private string SCORE_PREFIX = "Score: ";
     private string LEVEL_PREFIX = "Level: ";
-    private enum STATE { Running, Over, Paused };
+    private enum STATE { Running, Over, Paused, Started, Lost };
     private STATE currentState;
     private SpawnBall ballSpawner;
     private SpawnBrick brickSpawner;
@@ -37,19 +37,21 @@ public class Scoreboard : MonoBehaviour
     public Text levelText;
     public Text messageText;
     public int startingLives;
-    public int StartingLevel;
+    public int StartingLevel = 0;
     public int BrickHealth;
+    public GameObject OptionsMenu;
 
     // Start is called before the first frame update
     void Start()
     {
         ballSpawner = GetComponent<SpawnBall>();
         brickSpawner = GetComponent<SpawnBrick>();
-        levelCount = StartingLevel;
         LoseGame();
         titleImage.GetComponent<RawImage>().enabled = true;
         messageText.enabled = true;
+        OptionsMenu.SetActive(false); 
         messageText.text = START_MESSAGE;
+        currentState = STATE.Started;
     }
 
     // Update is called once per frame
@@ -61,7 +63,9 @@ public class Scoreboard : MonoBehaviour
                     PauseGame();
                 }
                 break;
+            case STATE.Started:
             case STATE.Paused:
+            case STATE.Lost:
             case STATE.Over:
                 if (Input.GetButtonUp("Submit")) {
                     UnPauseGame();
@@ -78,15 +82,12 @@ public class Scoreboard : MonoBehaviour
         UpdateLivesText();
         UpdateScoreText();
         messageText.enabled = false;
-        titleImage.GetComponent<RawImage>().enabled = false;
+        OptionsMenu.SetActive(false);
         Time.timeScale = 1.0f;
         currentState = STATE.Running;
         ballSpawner.Spawn();
-        if (BrickHealth != 0) {
-            SpawnLevel(levelCount, BrickHealth);
-        } else {
-            SpawnLevel(levelCount);
-        }
+        SpawnLevel(levelCount, BrickHealth);
+        
     }
 
     public void SetDifficulty(string difficulty)
@@ -127,16 +128,30 @@ public class Scoreboard : MonoBehaviour
         currentState = STATE.Paused;
         messageText.text = PAUSE_MESSAGE;
         messageText.enabled = true;
+        if (currentState != STATE.Over) {
+            OptionsMenu.SetActive(false);
+        } else {
+            OptionsMenu.SetActive(true);
+        }
+        
         Time.timeScale = 0;
     }
 
     public void UnPauseGame()
     {
-        if (currentState == STATE.Over) {
+        if (currentState == STATE.Started) {
+            titleImage.GetComponent<RawImage>().enabled = false;
+            currentState = STATE.Lost;
+            OptionsMenu.SetActive(true);
+        } else if (currentState == STATE.Lost) {
+            levelCount = StartingLevel;
+            NewGame();
+        } else if (currentState == STATE.Over) {
             NewGame();
         } else {
             currentState = STATE.Running;
             messageText.enabled = false;
+            OptionsMenu.SetActive(false);
             Time.timeScale = 1.0f;
         }
     }
@@ -160,7 +175,8 @@ public class Scoreboard : MonoBehaviour
         Destroy(ballSpawner.Ball);
         messageText.text = LOSE_MESSAGE + START_MESSAGE;
         messageText.enabled = true;
-        currentState = STATE.Over;
+        OptionsMenu.SetActive(true);
+        currentState = STATE.Lost;
     }
 
     public void ZeroLives()
