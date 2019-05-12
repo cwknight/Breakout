@@ -19,7 +19,7 @@ public class Scoreboard : MonoBehaviour
     private int lives;
     private string WIN_MESSAGE = "You Win!! ";
     private string LOSE_MESSAGE = "You Lose!! :( ";
-    private string START_MESSAGE = "Press Space/A to Start ";
+    private string START_MESSAGE = "Press Shift/Start to Start ";
     private string PAUSE_MESSAGE = "Press Space/A to unpause ";
     private string LIVES_PREFIX = "Lives: ";
     private string SCORE_PREFIX = "Score: ";
@@ -65,13 +65,13 @@ public class Scoreboard : MonoBehaviour
                 }
                 break;
             case STATE.Started:
+            case STATE.Over:
             case STATE.Paused:
                 if (Input.GetButtonUp("Submit") || Input.GetButtonUp("Fire3")) {
                     UnPauseGame();
                 }
                 break;
             case STATE.Lost:
-            case STATE.Over:
                 if (Input.GetButtonUp("Fire3")) {
                     UnPauseGame();
                 }
@@ -84,6 +84,7 @@ public class Scoreboard : MonoBehaviour
         score = 0;
         targetScore = 0;
         brickSpawner.DestroyBricks();
+        ballSpawner.DestroyBall();
         UpdateLivesText();
         UpdateScoreText();
         messageText.enabled = false;
@@ -148,10 +149,10 @@ public class Scoreboard : MonoBehaviour
             titleImage.GetComponent<RawImage>().enabled = false;
             currentState = STATE.Lost;
             OptionsMenu.SetActive(true);
-        } else if (currentState == STATE.Lost) {
+        }  else if (currentState == STATE.Lost) {
             levelCount = StartingLevel;
             NewGame();
-        } else if (currentState == STATE.Over) {
+        }  else if (currentState == STATE.Over) {
             NewGame();
         } else {
             currentState = STATE.Running;
@@ -163,7 +164,7 @@ public class Scoreboard : MonoBehaviour
 
     public void WinGame()
     {
-        Destroy(ballSpawner.Ball);
+        ballSpawner.DestroyBall();
         Time.timeScale = 0;
         levelCount++;
         messageText.text = WIN_MESSAGE + START_MESSAGE;
@@ -172,12 +173,12 @@ public class Scoreboard : MonoBehaviour
     }
     public void LoseGame()
     {
-        Time.timeScale = 0;
         ZeroScore();
         levelCount = StartingLevel;
         lives = startingLives;
         brickSpawner.DestroyBricks();
-        Destroy(ballSpawner.Ball);
+        ballSpawner.DestroyBall();
+        Time.timeScale = 0;
         messageText.text = LOSE_MESSAGE + START_MESSAGE;
         messageText.enabled = true;
         OptionsMenu.SetActive(true);
