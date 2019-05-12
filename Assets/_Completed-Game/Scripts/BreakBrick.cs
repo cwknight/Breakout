@@ -25,7 +25,7 @@ public class BreakBrick : MonoBehaviour
     }
     private void OnCollisionEnter(Collision collision)
     {
-        if (collision.collider.gameObject.CompareTag("Ball")) {
+        if (collision.collider.gameObject.CompareTag("Ball")) { 
             setcolor.health--;
             setcolor.UpdateColorAndHealth();
             scoreboard.IncrementScore();

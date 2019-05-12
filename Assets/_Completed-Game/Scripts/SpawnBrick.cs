@@ -49,6 +49,7 @@ public class SpawnBrick : MonoBehaviour
         GameObject brick = Instantiate(Brick);
         brick.transform.position = position;
         brick.GetComponent<SetColor>().health = health;
+        brick.GetComponent<SetColor>().UpdateColorAndHealth();
         brickCount += brick.GetComponent<SetColor>().health;
     }
 
@@ -160,16 +161,14 @@ public class SpawnBrick : MonoBehaviour
 
     }
 
-
-
     public void SpawnLevel(int levelSelector)
     {
         //brick addressing goes from top to bottom
         switch (levelSelector) {
-            case 0: //every other row starting at 0
+            case 0: 
                 ContinuousModeRandom();
                 break;
-            case 1: //ever other row starting at 1
+            case 1: 
                 SpawnBrickRowAt(6, 5);
                 SpawnBrickRowAt(2, 5);
                 SpawnBrickAt(0, 2);

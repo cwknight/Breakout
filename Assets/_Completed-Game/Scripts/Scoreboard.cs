@@ -2,19 +2,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using System;
 
 public class Scoreboard : MonoBehaviour
 {
+    public enum Difficulties
+    {
+        Easy = 1,
+        Medium = 3,
+        Hard = 5,
+        Random = 0
+    }
+
     private int score;
     private int lives;
     private string WIN_MESSAGE = "You Win!! ";
     private string LOSE_MESSAGE = "You Lose!! :( ";
-    private string START_MESSAGE = "Press Space/A to Start ";
+    private string START_MESSAGE = "Press Shift/Start to Start ";
     private string PAUSE_MESSAGE = "Press Space/A to unpause ";
     private string LIVES_PREFIX = "Lives: ";
     private string SCORE_PREFIX = "Score: ";
     private string LEVEL_PREFIX = "Level: ";
-    private enum STATE { Running, Over, Paused };
+    private enum STATE { Running, Over, Paused, Started, Lost };
     private STATE currentState;
     private SpawnBall ballSpawner;
     private SpawnBrick brickSpawner;
@@ -28,19 +38,22 @@ public class Scoreboard : MonoBehaviour
     public Text levelText;
     public Text messageText;
     public int startingLives;
-    public int StartingLevel;
+    public int StartingLevel = 0;
+    public int maxLevel = 3;
     public int BrickHealth;
+    public GameObject OptionsMenu;
 
     // Start is called before the first frame update
     void Start()
     {
         ballSpawner = GetComponent<SpawnBall>();
         brickSpawner = GetComponent<SpawnBrick>();
-        levelCount = StartingLevel;
         LoseGame();
         titleImage.GetComponent<RawImage>().enabled = true;
         messageText.enabled = true;
+        OptionsMenu.SetActive(false); 
         messageText.text = START_MESSAGE;
+        currentState = STATE.Started;
     }
 
     // Update is called once per frame
@@ -48,13 +61,19 @@ public class Scoreboard : MonoBehaviour
     {
         switch (currentState) {
             case STATE.Running:
-                if (Input.GetButtonUp("Cancel")) {
+                if (Input.GetButtonUp("Cancel") || Input.GetButtonUp("Fire3")) {
                     PauseGame();
                 }
                 break;
-            case STATE.Paused:
+            case STATE.Started:
             case STATE.Over:
-                if (Input.GetButtonUp("Submit")) {
+            case STATE.Paused:
+                if (Input.GetButtonUp("Submit") || Input.GetButtonUp("Fire3")) {
+                    UnPauseGame();
+                }
+                break;
+            case STATE.Lost:
+                if (Input.GetButtonUp("Fire3")) {
                     UnPauseGame();
                 }
                 break;
@@ -66,18 +85,39 @@ public class Scoreboard : MonoBehaviour
         score = 0;
         targetScore = 0;
         brickSpawner.DestroyBricks();
+        ballSpawner.DestroyBall();
         UpdateLivesText();
         UpdateScoreText();
-        messageText.text = "";
-        titleImage.GetComponent<RawImage>().enabled = false;
+        messageText.enabled = false;
+        OptionsMenu.SetActive(false);
         Time.timeScale = 1.0f;
         currentState = STATE.Running;
         ballSpawner.Spawn();
-        if (BrickHealth != 0) {
-            SpawnLevel(levelCount, BrickHealth);
-        } else {
-            SpawnLevel(levelCount);
+        if (levelCount > maxLevel) {
+            levelCount = StartingLevel;
         }
+        SpawnLevel(levelCount, BrickHealth);
+        
+    }
+
+    public void SetDifficulty(string difficulty)
+    {
+        Difficulties difficultyEnum = (Difficulties) Enum.Parse(typeof(Difficulties), difficulty);
+        BrickHealth = (int) difficultyEnum;
+    }
+
+    public void ToggleContinuous()
+    {
+        if (StartingLevel == 0) {
+            StartingLevel = 1;
+        } else {
+            StartingLevel = 0;
+        }
+    }
+
+    public void SetStartingHealth(int startingHealth)
+    {
+        startingLives = startingHealth;
     }
 
     public void SpawnLevel(int level)
@@ -97,38 +137,56 @@ public class Scoreboard : MonoBehaviour
 
         currentState = STATE.Paused;
         messageText.text = PAUSE_MESSAGE;
+        messageText.enabled = true;
+        if (currentState != STATE.Over) {
+            OptionsMenu.SetActive(false);
+        } else {
+            OptionsMenu.SetActive(true);
+        }
+        
         Time.timeScale = 0;
     }
 
     public void UnPauseGame()
     {
-        if (currentState == STATE.Over) {
+        if (currentState == STATE.Started) {
+            titleImage.GetComponent<RawImage>().enabled = false;
+            currentState = STATE.Lost;
+            OptionsMenu.SetActive(true);
+        }  else if (currentState == STATE.Lost) {
+            levelCount = StartingLevel;
+            NewGame();
+        }  else if (currentState == STATE.Over) {
             NewGame();
         } else {
             currentState = STATE.Running;
-            messageText.text = "";
+            messageText.enabled = false;
+            OptionsMenu.SetActive(false);
             Time.timeScale = 1.0f;
         }
     }
 
     public void WinGame()
     {
-        Destroy(ballSpawner.Ball);
+        ballSpawner.DestroyBall();
         Time.timeScale = 0;
         levelCount++;
         messageText.text = WIN_MESSAGE + START_MESSAGE;
+        messageText.enabled = true;
         currentState = STATE.Over;
     }
     public void LoseGame()
     {
-        Time.timeScale = 0;
         ZeroScore();
         levelCount = StartingLevel;
         lives = startingLives;
         brickSpawner.DestroyBricks();
-        Destroy(ballSpawner.Ball);
+        ballSpawner.DestroyBall();
+        Time.timeScale = 0;
         messageText.text = LOSE_MESSAGE + START_MESSAGE;
-        currentState = STATE.Over;
+        messageText.enabled = true;
+        OptionsMenu.SetActive(true);
+        currentState = STATE.Lost;
     }
 
     public void ZeroLives()

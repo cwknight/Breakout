@@ -27,4 +27,9 @@ public class SpawnBall : MonoBehaviour
         Ball.transform.position = startPosition;
 
     }
+
+    public void DestroyBall()
+    {
+        Destroy(Ball);
+    }
 }
