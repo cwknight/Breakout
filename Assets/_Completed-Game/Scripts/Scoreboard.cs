@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 using System;
 
 public class Scoreboard : MonoBehaviour
@@ -59,15 +60,19 @@ public class Scoreboard : MonoBehaviour
     {
         switch (currentState) {
             case STATE.Running:
-                if (Input.GetButtonUp("Cancel")) {
+                if (Input.GetButtonUp("Cancel") || Input.GetButtonUp("Fire3")) {
                     PauseGame();
                 }
                 break;
             case STATE.Started:
             case STATE.Paused:
+                if (Input.GetButtonUp("Submit") || Input.GetButtonUp("Fire3")) {
+                    UnPauseGame();
+                }
+                break;
             case STATE.Lost:
             case STATE.Over:
-                if (Input.GetButtonUp("Submit")) {
+                if (Input.GetButtonUp("Fire3")) {
                     UnPauseGame();
                 }
                 break;
