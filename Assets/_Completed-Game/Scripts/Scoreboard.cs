@@ -39,6 +39,7 @@ public class Scoreboard : MonoBehaviour
     public Text messageText;
     public int startingLives;
     public int StartingLevel = 0;
+    public int maxLevel = 3;
     public int BrickHealth;
     public GameObject OptionsMenu;
 
@@ -92,6 +93,9 @@ public class Scoreboard : MonoBehaviour
         Time.timeScale = 1.0f;
         currentState = STATE.Running;
         ballSpawner.Spawn();
+        if (levelCount > maxLevel) {
+            levelCount = StartingLevel;
+        }
         SpawnLevel(levelCount, BrickHealth);
         
     }
