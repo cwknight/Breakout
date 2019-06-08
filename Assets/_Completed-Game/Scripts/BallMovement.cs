@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class BallMovement : MonoBehaviour
 {
     [SerializeField]
-    [Tooltip("Just for debugging, adds some velocity during OnEnable")]
     private Vector3 initialVelocity;
 
     [SerializeField]
@@ -17,11 +16,13 @@ public class BallMovement : MonoBehaviour
     private enum STATE { Stuck, Unstuck };
     private STATE currentState;
     private GameObject Paddle;
+    public AudioSource audioSource;
     
     void Start()
     {
         Paddle = GameObject.FindWithTag("Player");
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<audioSource>();
         StickToPaddle();
         //Debug.Log("initial velocity" + rb.velocity.ToString());
     }
@@ -59,6 +60,7 @@ public class BallMovement : MonoBehaviour
         if (currentState == STATE.Stuck) {
             return;
         }
+        audioSource.Play();
         Bounce(collision.contacts[0].normal);
     }
 
